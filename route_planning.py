@@ -1,5 +1,5 @@
 import heapq
-from program.database_connect import get_map
+from database_connect import get_map
 
 class PriorityQueue:
     def __init__(self):
@@ -59,6 +59,9 @@ def a_star_search(graph, start, goal):
     return came_from, cost_so_far
 
 def get_route(start,destination):
+    '''
+    return the route from start to destination with order
+    '''
     graph = Graph(get_map())
     came_from, cost_so_far = a_star_search(graph, start, destination)
 
@@ -72,4 +75,4 @@ def get_route(start,destination):
 
     return path
 
-# test: print(get_route((0,0),(3,2)))
+# print(get_route((0, 0), (2, 1)))
