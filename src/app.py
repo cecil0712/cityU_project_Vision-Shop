@@ -59,12 +59,12 @@ def start_navigation(img_path):
     expander.write(f"Text obtained: {text}")
 
     if check_discount(text):
-        play_audio('audio/discount.wave')
+        play_audio('assets/audio/discount.wave')
 
     destination = get_item_coor(text)
     expander.write(f"Destination coordinates: {destination}")
 
-    play_audio('audio/directing.wav')
+    play_audio('assets/audio/directing.wav')
 
     current_brand = check_exist(OCR(img_path))
     if current_brand is None:
@@ -105,12 +105,12 @@ def start_navigation(img_path):
         if current_coor == route[route_num + 1]:
             route_num += 1
         elif current_coor not in [route[route_num], route[route_num + 1]]:
-            play_audio("audio/redirecting.wav")
+            play_audio("assets/audio/redirecting.wav")
             route = get_route(current_coor, destination)
             route_num = 0
 
     # Arrived
-    play_audio("audio/arrive.wav")
+    play_audio("assets/audio/arrive.wav")
     expander.write("Arrived at destination.")
 
 def get_direction(start, end, expander):
@@ -118,16 +118,16 @@ def get_direction(start, end, expander):
     delta_col = end[1] - start[1]
 
     if delta_row == 1 and delta_col == 0:
-        play_audio("./audio/foward.wav")
+        play_audio("./assets/audio/foward.wav")
         expander.write("Moving Forward")
     elif delta_row == -1 and delta_col == 0:
-        play_audio("./audio/backward.wav")
+        play_audio("./assets/audio/backward.wav")
         expander.write("Moving Backward")
     elif delta_row == 0 and delta_col == 1:
-        play_audio("./audio/right.wav")
+        play_audio("./assets/audio/right.wav")
         expander.write("Turning Right")
     elif delta_row == 0 and delta_col == -1:
-        play_audio("./audio/left.wav")
+        play_audio("./assets/audio/left.wav")
         expander.write("Turning Left")
         
 if __name__ == '__main__':

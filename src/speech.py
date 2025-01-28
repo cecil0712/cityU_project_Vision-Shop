@@ -47,7 +47,7 @@ def speak_item(item_list):
     keep detecting user's speech until the item name is spoken
     '''
     noItem=True
-    play_audio('audio/intro.wav')
+    play_audio('assets/audio/intro.wav')
     while noItem:
         try:
             with sr.Microphone() as source:
@@ -60,4 +60,4 @@ def speak_item(item_list):
                     SpeakText(f'Got it, we have {test} in the supermarket')
                     return test
         except sr.UnknownValueError:
-            play_audio('audio/again.wav')
+            play_audio('assets/audio/again.wav')
