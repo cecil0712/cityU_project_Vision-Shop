@@ -58,10 +58,8 @@ def a_star_search(graph, start, goal):
 
     return came_from, cost_so_far
 
+# get the route from start to destination in order
 def get_route(start,destination):
-    '''
-    return the route from start to destination with order
-    '''
     graph = Graph(get_map())
     came_from, cost_so_far = a_star_search(graph, start, destination)
 
