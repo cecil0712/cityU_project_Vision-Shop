@@ -4,6 +4,7 @@ from gradio_client import Client
 import os
 import simpleaudio as sa
 from database_connect import get_item_list
+import shutil
 
 r = sr.Recognizer() 
 
@@ -19,10 +20,18 @@ def SpeakText(text):
         language="EN",
         api_name="/synthesize"
     )
-    path=result.split('\\')[-2]
-    os.rename(f'.\{path}\\audio', f'.\{path}\\output.wav')
-    play_audio(f'.\{path}\\output.wav')     # Play the file using playsound
-    # os.remove(f".\{path}") # Delete the file after playing
+
+    norm_path = os.path.normpath(result) # normalise the file path
+    path = norm_path.split(os.path.sep)[-2] # obtain the folder name containing the audio file
+
+    source_file = os.path.join('.', path, 'audio')
+    dest_file = os.path.join('.', path, 'output.wav')
+    os.rename(source_file, dest_file)
+
+    play_audio(dest_file)
+
+    shutil.rmtree(os.path.join('.', path), ignore_errors=True) # Delete the file after playing
+
 
 def similarity(text, item_list, threshold=80):
     '''
