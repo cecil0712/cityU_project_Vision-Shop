@@ -1,10 +1,9 @@
 import streamlit as st
 import os
-from PIL import Image
 from route_planning import get_route, get_map
 from database_connect import check_discount, check_exist, get_item_coor, get_region_coor, get_item_list
 from text_detection import OCR
-from speech import speak_item, play_audio
+from speech import speak_item, play_audio, get_audio_path_from_name
 
 def main():
     st.set_page_config(page_title="Vision ∞ Shop")
@@ -46,7 +45,6 @@ def main():
             start_navigation(temp_path)
 
 def start_navigation(img_path):
-
     # Initializing an expander to store the logs
     expander = st.expander("Execution Log")
 
@@ -59,12 +57,12 @@ def start_navigation(img_path):
     expander.write(f"Text obtained: {text}")
 
     if check_discount(text):
-        play_audio('assets/audio/discount.wave')
+        play_audio(get_audio_path_from_name("discount"))
 
     destination = get_item_coor(text)
     expander.write(f"Destination coordinates: {destination}")
 
-    play_audio('assets/audio/directing.wav')
+    play_audio(get_audio_path_from_name("directing"))
 
     current_brand = check_exist(OCR(img_path))
     if current_brand is None:
@@ -105,29 +103,32 @@ def start_navigation(img_path):
         if current_coor == route[route_num + 1]:
             route_num += 1
         elif current_coor not in [route[route_num], route[route_num + 1]]:
-            play_audio("assets/audio/redirecting.wav")
+            play_audio(get_audio_path_from_name("redirecting"))
             route = get_route(current_coor, destination)
             route_num = 0
 
     # Arrived
-    play_audio("assets/audio/arrive.wav")
+    play_audio(get_audio_path_from_name("arrive"))
     expander.write("Arrived at destination.")
+
+    if os.path.exists(img_path):
+        os.remove(img_path)
 
 def get_direction(start, end, expander):
     delta_row = end[0] - start[0]
     delta_col = end[1] - start[1]
 
     if delta_row == 1 and delta_col == 0:
-        play_audio("./assets/audio/foward.wav")
+        play_audio(get_audio_path_from_name("forward"))
         expander.write("Moving Forward")
     elif delta_row == -1 and delta_col == 0:
-        play_audio("./assets/audio/backward.wav")
+        play_audio(get_audio_path_from_name("backward"))
         expander.write("Moving Backward")
     elif delta_row == 0 and delta_col == 1:
-        play_audio("./assets/audio/right.wav")
+        play_audio(get_audio_path_from_name("right"))
         expander.write("Turning Right")
     elif delta_row == 0 and delta_col == -1:
-        play_audio("./assets/audio/left.wav")
+        play_audio(get_audio_path_from_name("left"))
         expander.write("Turning Left")
         
 if __name__ == '__main__':
